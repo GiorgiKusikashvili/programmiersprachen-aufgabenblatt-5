@@ -400,7 +400,7 @@ List<T>::List(List<T> const& rhs):size_{0}, first_{nullptr}, last_{nullptr} {
     while (current != nullptr) {
         push_back(current->value); // Element hinten an unsere neue Liste anhängen
         current = current->next;   // Zum nächsten Knoten wandern
-    } {
+    }
 
 
 }
@@ -409,20 +409,24 @@ List<T>::List(List<T> const& rhs):size_{0}, first_{nullptr}, last_{nullptr} {
 // test and implement:
 // TODO: helper-swap-method for bultin-types used by unifying assignment operator (see Vorlesung 10, pp. 11-13)
 // Aufgabe 5.6 - Teil 1
-/* ... */
+/* Tauscht den Inhalt (die Pointer und die Größe) dieser Liste mit einer anderen Liste aus */
 template <typename T>
 void List<T>::swap(List<T>& rhs) {
-
+    //wir tauschen die firs, last und size von origineller Liste mit der Liste von rhs aus.
+    std::swap(first_, rhs.first_);
+    std::swap(last_, rhs.last_);
+    std::swap(size_, rhs.size_);
 }
 
 //=========================
 // test and implement:
 // TODO: unyfing assignment operator (see Vorlesung 10, pp. 11-13)
 // Aufgabe 5.6 - Teil 2
-/* ... */
+/* Zuweisungsoperator mittels Copy-and-Swap-Idiom */
 template <typename T>
 List<T>& List<T>::operator=(List<T> rhs) {
-
+    swap(rhs); // Unsere Daten mit den kopierten Daten von rhs tauschen
+    return *this; // Eine Referenz auf uns selbst zurückgeben
 }
 
 //=========================

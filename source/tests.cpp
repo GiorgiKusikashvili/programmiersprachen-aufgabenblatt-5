@@ -96,6 +96,32 @@ TEST_CASE("List - Aufgabe 5.5 - Testing Copy Constructor")
   REQUIRE(original.front() == 10);
   REQUIRE(original.size() == 3);
 }
+TEST_CASE("List - Aufgabe 5.6 - Testing Assignment Operator")
+{
+  List<int> liste1;
+  liste1.push_back(1);
+  liste1.push_back(2);
+
+  List<int> liste2;
+  liste2.push_back(100);
+
+  // 1. Normale Zuweisung testen
+  liste2 = liste1;
+
+  REQUIRE(liste2.size() == 2);
+  REQUIRE(liste2.front() == 1);
+  REQUIRE(liste2.back() == 2);
+
+  // Sicherstellen, dass es eine tiefe Kopie ist (Also Änderung an liste2 betrifft liste1 nicht)
+  liste2.push_back(3);
+  REQUIRE(liste2.size() == 3);
+  REQUIRE(liste1.size() == 2);
+
+  // 2. Selbstzuweisung testen (darf nicht abstürzen)
+  liste1 = liste1;
+  REQUIRE(liste1.size() == 2);
+  REQUIRE(liste1.front() == 1);
+}
 
 #include <map>
 
