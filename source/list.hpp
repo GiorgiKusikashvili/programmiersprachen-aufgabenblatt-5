@@ -365,20 +365,24 @@ T& List<T>::back() {
 // test and implement:
 // TODO: clear 
 // Aufgabe 5.4 - Teil 1
-/* ... */
+/* Löscht alle Elemente der Liste nacheinander, um den Speicher freizugeben */
 template <typename T>
 void List<T>::clear() {
-
+    //also while-Schleife durchläuft bis die liste leer ist, bei jedem durchlauf wird pop_front() geführt, womit die elemente nacheinander entfernt werden
+    while (!empty()) {
+        pop_front();
+    }
 }
 
 //=========================
 // test and implement:
 // TODO: List Destructor implemented by calling clear
 // Aufgabe 5.4 - Teil 2
-/* ... */
+/*Destruktor: Ruft clear() auf, um beim Löschen der Liste alle Ressourcen freizugeben. Also Die Speicher wird freigegeben */
 template <typename T>
 List<T>::~List() {
     //TODO: Implement via clear-Method (Aufgabe 5.4)
+    clear();
 } //can not be tested with unit tests
 
 //=========================

@@ -48,6 +48,26 @@ ListNode<T>* get_node_pointer(ListIterator<T> const& list_iterator_to_test) { re
 #include "sub_tests/iterators/operator_does_not_equal.test"
 #include "sub_tests/iterators/operator_iterate_forward.test"
 
+TEST_CASE("List - Aufgabe 5.4 - Testing clear()")
+{
+  List<int> meine_liste;
+
+  // 1. Überprüfen, ob clear() bei einer bereits leeren Liste kein Problem macht
+  meine_liste.clear();
+  REQUIRE(meine_liste.empty());
+  REQUIRE(meine_liste.size() == 0);
+
+  // 2. Elemente hinzufügen und Größe Überprufen
+  meine_liste.push_back(1);
+  meine_liste.push_back(2);
+  meine_liste.push_back(3);
+  REQUIRE(meine_liste.size() == 3);
+
+  // 3. clear() ausführen und kontrollieren
+  meine_liste.clear();
+  REQUIRE(meine_liste.empty());
+  REQUIRE(meine_liste.size() == 0);
+}
 
 #include <map>
 
