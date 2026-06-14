@@ -389,9 +389,21 @@ List<T>::~List() {
 // test and implement:
 // TODO: Copy-Konstruktor using Deep-Copy semantics
 // Aufgabe 5.5
-/* ... */
+/* Copy-Konstruktor: es wird eine tiefe Kopie der Liste erzeugt*/
 template <typename T>
-List<T>::List(List<T> const& rhs) {}
+//neue leere Liste erstellen
+List<T>::List(List<T> const& rhs):size_{0}, first_{nullptr}, last_{nullptr} {
+    // Zeiger auf den Anfang der zu kopierenden Liste setzen
+    ListNode<T>* current = rhs.first_;
+
+    // Die originale Liste von vorne nach hinten durchlaufen
+    while (current != nullptr) {
+        push_back(current->value); // Element hinten an unsere neue Liste anhängen
+        current = current->next;   // Zum nächsten Knoten wandern
+    } {
+
+
+}
 
 //=========================
 // test and implement:

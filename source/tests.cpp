@@ -69,6 +69,34 @@ TEST_CASE("List - Aufgabe 5.4 - Testing clear()")
   REQUIRE(meine_liste.size() == 0);
 }
 
+TEST_CASE("List - Aufgabe 5.5 - Testing Copy Constructor")
+{
+  // 1. Eine Originalliste erstellen und befüllen
+  List<int> original;
+  original.push_back(10);
+  original.push_back(20);
+  original.push_back(30);
+
+  // 2. Den Copy-Konstruktor aufrufen
+  List<int> kopie{original};
+
+  // Beide Listen müssen die gleiche Größe und die gleichen Werte haben
+  REQUIRE(kopie.size() == 3);
+  REQUIRE(kopie.front() == 10);
+  REQUIRE(kopie.back() == 30);
+
+  // 3. Sicherstellen, dass es eine Tiefe Kopie ist
+  kopie.pop_front(); // Löscht die 10 aus der KOPIE
+
+  // In der Kopie sollte das erste Element jetzt 20 sein
+  REQUIRE(kopie.front() == 20);
+  REQUIRE(kopie.size() == 2);
+
+  // Das Original darf sich NICHT verändert haben
+  REQUIRE(original.front() == 10);
+  REQUIRE(original.size() == 3);
+}
+
 #include <map>
 
 int main(int argc, char *argv[])
