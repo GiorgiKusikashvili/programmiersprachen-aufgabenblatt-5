@@ -135,41 +135,62 @@ class List {
  //=========================
 // not fully implemented yet
 /* Aufgabe 5.2 - Teil 1 */
-/* ... */
+/*Standard-Konstruktor: Initialisiert eine leere Liste */
 template <typename T>
-List<T>::List() {}
+List<T>::List() : size_{0}, first_{nullptr}, last_{nullptr} {}
 
 //=========================
 // test and implement
 /* Aufgabe 5.2 - Teil 2 */
-/* ... */
+/* Gibt die Anzahl der Elemente in der Liste in O(1) zurück */
 template <typename T>
 std::size_t List<T>::size() const {
     //TODO: return value of member variable insteaf of 27
-    return 27;
+    return size_;
 };
 
 //=========================
 // test and implement
 /* Aufgabe 5.2 - Teil 3 */
-/* ... */
+/* Prüft, ob die Liste leer ist (Größe == 0) */
 template <typename T>
 bool List<T>::empty() const {
     // check whether size member variable is zero -- this should be a one line implementation
-    return false;
+    return size_ == 0;
 };
 
 //=========================
 /* Aufgabe 5.3 - Teil 1 */
-/* ... */
+/* Ein Element wird am Anfang hingefügt */
 template <typename T>
 void List<T>::push_front(T const& element) {
     // TODO: push_front-method (Aufgabe 5.3)
+    //wir erstellen ein neuen knoten mit "new ListNode<T>"
+    // Wert = element, prev = nullptr, next = bisheriges first_
+    ListNode<T>* new_node = new ListNode<T>{element, nullptr, first_};
+
+    if (empty()) {
+        last_ = new_node;  // Wenn leer, ist es auch das letzte Element. also das Element ist erste  und letzte
+    } else {
+        first_->prev = new_node; // Altes erstes Element zeigt rückwärts auf das neue
+    }
+
+    first_ = new_node; // Das neue Element ist jetzt das erste
+    ++size_;           // Größe inkrementieren
+
+    /*ERKLÄRUNG:
+     *Also was ist pasiert: Die Liste hat ein Anfangsknote und ein Endknote.
+     *[Anfang]<->[Ende]
+     * mit push_front, rütschen wir der Anfangsknote eins rechts, und an seiner stellen fügen wir ein neues Element ein
+     *[neues Element]<->[Anfang]<->[Ende]
+     *und nun aktualisieren wir die Liste
+     *[Anfang]<->[neues Element]<->[Ende]
+     */
 }
 
 //=========================
 /* Aufgabe 5.3 - Teil 2 */
-/* ... */
+/* das erste Element wird entfernt */
 template <typename T>
 void List<T>::pop_front() {
     if (empty()) {
@@ -177,19 +198,63 @@ void List<T>::pop_front() {
     }
 
     // TODO: remainder of pop_front-method (Aufgabe 5.3)
+    ListNode<T>* to_delete = first_; // Wir merken uns den alten ersten Knoten
+
+    if (size_ == 1) {
+        // Wenn es das einzige Element war, ist die Liste danach leer
+        //deswegen mussen wir firs und last auf nullpoiter setzten damit wir "Memory Leak" vermeiden
+        first_ = nullptr;
+        last_ = nullptr;
+    } else {
+        first_ = first_->next; // Das zweite Element wird das neue erste
+        first_->prev = nullptr; // Es gibt nichts mehr davor
+    }
+
+    delete to_delete; // Speicher sauber freigeben!
+    --size_;          // Größe dekrementieren
+
+    /* ERKLÄRUNG:
+     * das erste Element wird entfernt
+     * [first]<->[ein Element (z.b name: a)]<->[last]
+     *  wird zu:
+     * [ein Element]<->[last]
+     * jetzt wird das ein Element names a, das erte Elemen
+     * [first (also a)]<->[last]
+     */
 }
 
 //=========================
 /* Aufgabe 5.3 - Teil 3 */
-/* ... */
+/* Ein Element wird am Ende der Liste hingefügt */
 template <typename T>
 void List<T>::push_back(T const& element) {
     // TODO: push_back-method (Aufgabe 5.3)
+    // Neuen Knoten erstellen
+    //Wert = element, prev = bisheriges last_, next = nullptr
+    ListNode<T>* new_node = new ListNode<T>{element, last_, nullptr};
+
+    if (empty()) {
+        first_ = new_node; // Wenn leer, ist es auch das erste Element
+    } else {
+        last_->next = new_node; // Altes letztes Element zeigt vorwärts auf das neue
+    }
+
+    last_ = new_node; // Das neue Element ist jetzt das letzte
+    ++size_;          // Größe inkrementieren
+
+    /*ERKLÄRUNG:
+     *Also was ist pasiert: Die Liste hat ein Anfangsknote und ein Endknote.
+     *[Anfang]<->[Ende]
+     * mit push_back, rütschen wir der Endknote eins links, und an seiner stellen fügen wir ein neues Element ein
+     *[Anfang]<->[Ende]<->[neues Element]
+     *und nun aktualisieren wir die Liste
+     *[Anfang]<->[neues Element]<->[Ende]
+     */
 }
 
 //=========================
 /* Aufgabe 5.3 - Teil 4 */
-/* ... */
+/* das letzte Element wird entfernt */
 template <typename T>
 void List<T>::pop_back() {
     if (empty()) {
@@ -197,32 +262,81 @@ void List<T>::pop_back() {
     }
 
     // TODO: remainder of pop_back-method (Aufgabe 5.3)
+    ListNode<T>* to_delete = last_; // Wir merken uns den alten letzten Knoten
+
+    if (size_ == 1) {
+        first_ = nullptr;
+        last_ = nullptr;
+    } else {
+        last_ = last_->prev; // Das vorletzte Element wird das neue letzte
+        last_->next = nullptr; // Es gibt nichts mehr danach
+    }
+
+    delete to_delete; // Speicher sauber freigeben!
+    --size_;          // Größe dekrementieren
+
+        /* ERKLÄRUNG:
+         * das letzte Element wird entfernt
+         * [first]<->[ein Element (z.b name: b)]<->[last]
+         *  wird zu:
+         * [first]<->[ein Element]
+         * jetzt wird das ein Element namens b das letzte Element
+         * [first]<->[last (also b)]
+         */
 }
+
+//UNTERSCHIED: PUSH vs EMPLACE
+/*
+ * Push: es wird ein Element bzw. ein object in der Liste bzw in der Knoten kopiert oder verschoben
+ * Emplace: es wird ein Argument übergeben womit das object direkt in knoten gebaut wird.
+ *          damit wird unnötige Kopie gespart
+ */
+
 
 //=========================
 /* Aufgabe 5.3 - Teil 5 */
-/* ... */
+/* Baut ein Element direkt am Anfang der Liste */
 template <typename T>
 template <class... Args>
 void List<T>::emplace_back(Args&&... args)
 {
     // TODO: emplace_back-method (Aufgabe 5.3)
+    // Es wird ein neuen Knoten erstellt, dessen "value" direkt mit den Argumenten konstruiert wird
+    ListNode<T>* new_node = new ListNode<T>{T(std::forward<Args>(args)...), last_, nullptr};
+
+    if (empty()) {
+        first_ = new_node;
+    } else {
+        last_->next = new_node;
+    }
+    last_ = new_node;
+    ++size_;
+
 }
 
 //=========================
 /* Aufgabe 5.3 - Teil 6 */
-/* ... */
+/* Baut ein Element direkt am Ende der Liste */
 template <typename T>
 template <class... Args>
 void List<T>::emplace_front(Args&&... args)
 {
     // TODO: emplace_front-method (Aufgabe 5.3)
+    ListNode<T>* new_node = new ListNode<T>{T(std::forward<Args>(args)...), nullptr, first_};
+
+    if (empty()) {
+        last_ = new_node;
+    } else {
+        first_->prev = new_node;
+    }
+    first_ = new_node;
+    ++size_;
 }
 
 
 //=========================
 /* Aufgabe 5.3 - Teil 6 */
-/* ... */
+/* Das erste Element wird zurückgegeben */
 template <typename T>
 T& List<T>::front() {
     if (empty()) {
@@ -230,6 +344,8 @@ T& List<T>::front() {
     }
 
     // TODO: remainder of front-method (Aufgabe 5.3)
+    return first_->value; // Value (den Wert) des erten Knoten wird zurückgegeben (also das erste Element)
+
 }
 
 //=========================
@@ -242,6 +358,7 @@ T& List<T>::back() {
     }
 
     // TODO: remainder of back-method (Aufgabe 5.3)
+    return last_->value;  //Value (den Wert) des letzten Knoten wird zurückgegeben (also das letzte Element)
 }
 
 //=========================
