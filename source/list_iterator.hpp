@@ -80,6 +80,8 @@ T& ListIterator<T>::operator*() const {
     //TODO: remaining implementation of derefenciation of 
     //      iterator using operator*
 
+    return node_->value; //der Wert des knoten zurückgeben
+
 } //call: *it
 
 //=========================
@@ -95,6 +97,9 @@ T* ListIterator<T>::operator->() const {
 
     //TODO: remaining implementation of derefenciation of 
     //      iterator using operator->
+
+    return &(node_->value); //  Gibt die Adresse des Werts zurück
+
 }  //call it->method() or it->member
 
 //=========================
@@ -109,6 +114,9 @@ ListIterator<T>& ListIterator<T>::operator++() {
     }
 
     //TODO: Implement Postincrement-Operation for Iterator
+
+    node_ = node_->next; // Zum nächsten Knoten springen
+    return *this;        // Sich selbst zurückgeben
 }
 
 //=========================
@@ -123,6 +131,10 @@ ListIterator<T> ListIterator<T>::operator++(int) {
     }
 
     //TODO: Implement Postincrement-Operation for Iterator
+
+    ListIterator<T> early_point = *this; // Alten Zustand merken
+    node_ = node_->next;                    // Nach vorne wandern
+    return early_point;                  // Den alten Zustand zurückgeben
 }
 
 //=========================
@@ -134,7 +146,8 @@ template <typename T>
 bool ListIterator<T>::operator==(ListIterator<T> x) const {
     //TODO: Implement Equality-Operation for Iterator
     // Iterators should be the same if they refer to the same node
-    return false;
+    return node_ == x.node_; // Vergleicht, ob beide auf denselben Knoten zeigen;
+
 } // call it: == it
 
 //=========================
@@ -146,7 +159,7 @@ template <typename T>
 bool ListIterator<T>::operator!=(ListIterator<T> x) const {
     //TODO: Implement Inequality-Operation for Iterator  
     // Reuse operator==
-    return false;
+    return !(*this == x); // Nutzt den operator== aus Aufgabe 5.10 Teil 5
 } // call it: != it
 
 //=========================

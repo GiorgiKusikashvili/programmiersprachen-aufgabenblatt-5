@@ -529,6 +529,7 @@ template <typename T>
 ListIterator<T> List<T>::end() {
     //TODO: end-Method returning an Iterator to element after (!) 
     //      the last element in the List (Aufgabe 5.9)
+    
     return {};
 }
 
