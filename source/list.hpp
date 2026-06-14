@@ -514,23 +514,23 @@ bool List<T>::operator!=(List const& rhs) const {
 
 //=========================
 // Aufgabe 5.9 - Teil 1
-/* ... */
+/* Gibt einen Iterator auf das erste Element zurück */
 template <typename T>
 ListIterator<T> List<T>::begin() {
     //TODO: begin-Method returning an Iterator to the 
     //      first element in the List (Aufgabe 5.9)
-    return {};
+    return ListIterator<T>{first_};
 }
 
 //=========================
 // Aufgabe 5.9 - Teil 2
-/* ... */
+/* Gibt einen Iterator auf das Element hinter dem letzten Element zurück (nullptr) */
 template <typename T>
 ListIterator<T> List<T>::end() {
     //TODO: end-Method returning an Iterator to element after (!) 
     //      the last element in the List (Aufgabe 5.9)
-    
-    return {};
+
+    return ListIterator<T>{nullptr};
 }
 
 //=========================
