@@ -122,6 +122,65 @@ TEST_CASE("List - Aufgabe 5.6 - Testing Assignment Operator")
   REQUIRE(liste1.size() == 2);
   REQUIRE(liste1.front() == 1);
 }
+TEST_CASE("List - Aufgabe 5.7 - Testing reverse")
+{
+  List<int> liste;
+  liste.push_back(1);
+  liste.push_back(2);
+  liste.push_back(3);
+
+  // 1. Teste die Member-Funktion
+  liste.reverse();
+  REQUIRE(liste.size() == 3);
+  REQUIRE(liste.front() == 3);
+  REQUIRE(liste.back() == 1);
+
+  // Wieder zurückdrehen für den nächsten Test
+  liste.reverse();
+
+  // 2. Teste die freie Funktion (gibt Kopie zurück)
+  List<int> umgedrehte_liste = reverse(liste);
+
+  // Das Original muss unverändert sein
+  REQUIRE(liste.front() == 1);
+  REQUIRE(liste.back() == 3);
+
+  // Die neue Liste muss umgedreht sein
+  REQUIRE(umgedrehte_liste.size() == 3);
+  REQUIRE(umgedrehte_liste.front() == 3);
+  REQUIRE(umgedrehte_liste.back() == 1);
+}
+TEST_CASE("List - Aufgabe 5.8 - Testing Comparison Operators")
+{
+  List<int> l1;
+  l1.push_back(1);
+  l1.push_back(2);
+  l1.push_back(3);
+
+  List<int> l2;
+  l2.push_back(1);
+  l2.push_back(2);
+  l2.push_back(3);
+
+  List<int> l3;
+  l3.push_back(1);
+  l3.push_back(2);
+  l3.push_back(99); // Anderer Wert am Ende
+
+  List<int> l4;
+  l4.push_back(1);
+  l4.push_back(2);
+
+  // 1. Gleichheit testen
+  REQUIRE(l1 == l2);
+  REQUIRE_FALSE(l1 == l3);
+  REQUIRE_FALSE(l1 == l4);
+
+  // 2. Ungleichheit testen
+  REQUIRE(l1 != l3);
+  REQUIRE(l1 != l4);
+  REQUIRE_FALSE(l1 != l2);
+}
 
 #include <map>
 

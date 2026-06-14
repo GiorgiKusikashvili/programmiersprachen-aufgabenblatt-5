@@ -431,35 +431,85 @@ List<T>& List<T>::operator=(List<T> rhs) {
 
 //=========================
 // Aufgabe 5.7 - Teil 1
-/* ... */
+/* Die aktuelle (originale) Liste umdrehen */
 template <typename T>
 void List<T>::reverse() {
 
+    if (empty() || size_ == 1) {
+        return; //weil ine leere Liste oder eine Liste mit 1 Element ist schon "umgedreht"
+    }
+
+    ListNode<T>* current = first_;
+    ListNode<T>* temp = nullptr;
+
+    // Durch die Liste gehen und bei jedem Knoten "next" und "prev" vertauschen
+    while (current != nullptr) {
+        temp = current->prev;       // Alten prev-Zeiger merken
+        current->prev = current->next; // prev zeigt jetzt auf den Nachfolger
+        current->next = temp;          // next zeigt jetzt auf den Vorgänger
+
+        // Da wir die Zeiger vertauscht haben, wandert "current->prev"
+        // in der originalen Liste zum nächsten Element
+        current = current->prev;
+    }
+
+    // Am Ende müssen wir noch die globalen first_ und last_ Zeiger der Liste tauschen
+    temp = first_;
+    first_ = last_;
+    last_ = temp;
 }
 
 //=========================
 // Aufgabe 5.7 - Teil 2
-/* ... */
+/* Gibt eine neue Liste zurück, die eine umgedrehte Kopie der übergebenen Liste ist */
 template <typename T>
 List<T> reverse(List<T> const& list_to_reverse) {
-
+    List<T> result{list_to_reverse}; // Tiefe Kopie erstellen
+    result.reverse();                // Die Kopie umdrehen
+    return result;                   // Umgedrehte Kopie zurückgeben
 }
 
 //=========================
 // Aufgabe 5.8 - Teil 1
-/* ... */
+/* Vergleicht zwei Listen auf Gleichheit (gleiche Größe und gleiche Werte) */
 template <typename T>
 bool List<T>::operator==(List const& rhs) const {
     //TODO: operator== (Aufgabe 5.8)
+    //beide Liste müsssen gleiche Anzhahl von Elemente an gleicher Stellen haben
+
+    //Wenn die originale und kopie Listen nicht gleich sind "false" zurückgeben
+    if (size_ != rhs.size_) {
+        return false;
+    }
+
+    // Zeiger auf den Anfang beider Listen setzen
+    ListNode<T>* current_lhs = first_;
+    ListNode<T>* current_rhs = rhs.first_;
+
+    // Parallel durch beide Listen gehen
+    while (current_lhs != nullptr && current_rhs != nullptr) {
+        // Wenn sich ein Wert unterscheidet, sind die Listen ungleich
+        if (current_lhs->value != current_rhs->value) {
+            return false;
+        }
+        current_lhs = current_lhs->next;
+        current_rhs = current_rhs->next;
+    }
+
+    // Wenn die Schleife ohne Unterschiede durchgelaufen ist, sind sie komplett gleich also return true
+    return true;
 }
 
 //=========================
 // Aufgabe 5.8 - Teil 2
-/* ... */
+/* Vergleicht zwei Listen auf Ungleichheit */
 template <typename T>
 bool List<T>::operator!=(List const& rhs) const {
     //TODO: operator!= (Aufgabe 5.8)
     // make use of operator== you implemented
+
+    //wir verwenden (rufen auf) operator== um zu vergleichen. wenn operator== "falsch" liefert dann return true
+    return !(*this == rhs);
 }
 
 //=========================
