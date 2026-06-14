@@ -358,7 +358,7 @@ T& List<T>::back() {
     }
 
     // TODO: remainder of back-method (Aufgabe 5.3)
-    return last_->value;  //Value (den Wert) des letzten Knoten wird zurückgegeben (also das letzte Element)
+    return last_->value;  //Value (den Wert) des letzten Knoten wird zurückgegeben (also das letzte Element).
 }
 
 //=========================
